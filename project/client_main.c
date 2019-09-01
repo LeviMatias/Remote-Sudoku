@@ -12,16 +12,24 @@ void client_start(client_t* self, const char* hostname, const char* servicename)
       printf("Error in getaddrinfo: %s\n", gai_strerror(s));
       return;
    }
-   socket_init(&(self->socket),self->result);
 }
 
 //attemps to connect and starts listening for input
 //POS: returns exit value
 int client_connect(client_t* self){
-	return 0;
+	int s = 0;
+	s = socket_init(&(self->socket),self->result);
+	if (s != -1){
+		char word[12+1];
+		if (fgets(word, sizeof(word), stdin)){
+			protocol_parse_client_input(&(self->protocol),word);
+		}
+	}
+	return s;
 }
 
 //finalize the client
 void client_shutdown(client_t* self){
+	socket_release(&(self->socket));
 	freeaddrinfo(self->result);
 }

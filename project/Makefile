@@ -17,7 +17,6 @@ extension = c
 # descomentar la línea (quitarle el '#' del principio).
 # NOTA: No poner cabeceras (.h).
 #fuentes = entrada.cpp
-fuentes = main.c client/client_main.c common/common_socket.c
 
 # Si usa funciones de math.h, descomentar (quitar el '#' a) la siguiente línea.
 math = si

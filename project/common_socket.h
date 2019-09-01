@@ -7,24 +7,32 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <unistd.h>
+#include <stdbool.h>
 
+#define CONNECTED 0
+#define NOT_CONNECTED -1
 
 typedef struct {
 	int fd; //file descriptor
+	int connected;
 	//type, server or client
 	char* host;
 	char* service; //port
 } socket_t;
 
-void socket_init(socket_t* self, struct addrinfo* ai);
+//initializes and connects a socket to the addrinfo specified
+//POS: returns 0 if succeeded -1 if not
+int socket_init(socket_t* self, struct addrinfo* ai);
 
-int socket_connect(socket_t* self,const char* host, const char* service);
+//int socket_connect(socket_t* self,const char* host, const char* service);
 
 int socket_bind_and_listen(socket_t* self, const char* service);
 
 int socket_send(socket_t* self, const void* buffer, size_t length);
 
 int socket_receive(socket_t* self, const void* buffer, size_t length);
+
+bool socket_is_connected(socket_t* self);
 
 void socket_release(socket_t* self);
 
