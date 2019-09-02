@@ -1,4 +1,10 @@
+#ifndef __CMD_PARSER_H__
+#define __CMD_PARSER_H__
+
 #include "common_command.h"
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
 
 typedef struct{
 	char* name;
@@ -16,3 +22,5 @@ int cmd_parse_single(char* buffer, size_t* buffer_size, char* cmd);
 //POS: parses cmd until EOL, attemps to find a single value and 2 coordinates (X:Y) in the [1;9] range
 //returns 0 if successful, -1 otherwise
 int cmd_parse_coordinates(char* buffer, size_t* buffer_size, char* cmd);
+
+#endif

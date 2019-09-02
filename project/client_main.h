@@ -1,14 +1,12 @@
 #ifndef __CLIENT_H__
 #define __CLIENT_H__
 
-#define _POSIX_C_SOURCE 200112L
+#include "client_protocol.h"
 
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
 #include <stdbool.h>
-
-#include "client_protocol.h"
 
 typedef struct {
 	struct addrinfo hints;

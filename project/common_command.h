@@ -1,11 +1,6 @@
 #ifndef __COMMAND_H__
 #define __COMMAND_H__
 
-#include <string.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <stdbool.h>
-
 #define MAX_MESSAGE_LENGTH 4
 #define UPPER_BOUND "9"
 #define LOWER_BOUND "1"
