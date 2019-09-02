@@ -78,40 +78,36 @@ int socket_bind_and_listen(socket_t* self, struct addrinfo* ai){
   if (s == -1){
     printf("Error: %s\n", strerror(errno));
   }
-
   return s;
 }
 
-int socket_receive(socket_t* self, const char* buffer, size_t size){
-  /*
+int socket_accept(socket_t* self, struct addrinfo* ai){
+  return accept(self->fd, NULL, NULL);
+}
 
+int socket_receive(socket_t* self, char* buffer, size_t size){
   int received = 0;
-   int s = 0;
-   bool is_the_socket_valid = true;
+  int s = 0;
+  bool is_the_socket_valid = true;
 
-   while (received < size && is_the_socket_valid) {
-      s = recv(skt, &buf[received], size-received, 0);
+  while (received < size && is_the_socket_valid) {
+    s = recv(self->fd, &buffer[received], size-received, 0);
 
-      if (s == 0) { // nos cerraron el socket :(
-         is_the_socket_valid = false;
-      }
-      else if (s == -1) { // hubo un error >(
-         is_the_socket_valid = false;
-      }
-      else {
-         received += s;
-      }
-   }
+    if (s == 0) { // socket is closed
+      is_the_socket_valid = false;
+    } else if (s == -1) { // there was an error
+      is_the_socket_valid = false;
+      printf("Error: %s\n", strerror(errno));
+    } else {
+      received += s;
+    }
+  }
 
-   if (is_the_socket_valid) {
-      return received;
-   }
-   else {
-      return -1;
-   }
-
-  */
-  return 0;
+  if (is_the_socket_valid) {
+    return received;
+  } else {
+    return -1;
+  }
 }
 
 void socket_release(socket_t* self){

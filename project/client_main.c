@@ -14,19 +14,23 @@ void client_start(client_t* self, const char* hostname, const char* servicename)
    }
 }
 
-//attemps to connect and starts listening for input
-//POS: returns exit value
 int client_connect(client_t* self){
 	int s = 0;
 	s = protocol_init(&(self->protocol), self->result);
 	if (s != -1){
 		char word[12+1];
-		if (fgets(word, sizeof(word), stdin)){
+		while (fgets(word, sizeof(word), stdin) && s != EXIT_CODE){
 			int s = protocol_parse_client_input(&(self->protocol), word);
 			if (s == 0){
 				protocol_send(&(self->protocol));
+				//protocol_receive(&(self->protocol));
 			}
 		}
+		if (s == EXIT_CODE){
+			s = 0; // execution was successful
+		}
+	} else{
+		printf("Could not connect \n");
 	}
 	return s;
 }

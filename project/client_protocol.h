@@ -2,7 +2,7 @@
 #define __PROTOCOL_H__
 
 #include "common_socket.h"
-#include "common_command.h"
+#include "client_command_parser.h"
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -20,7 +20,7 @@ typedef struct {
 int protocol_init(protocol_t* self, struct addrinfo* ai);
 
 //receives a string inputted by the user and parses it so it can be sent
-//POS: returns 0 if command was valid
+//POS: returns 0 if command was valid, -1 if not, 1 if exit
 int protocol_parse_client_input(protocol_t* self, char* input);
 
 //sends data previously parsed with protocol_parse_client_input

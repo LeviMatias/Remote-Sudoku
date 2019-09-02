@@ -8,7 +8,7 @@
 #include <errno.h>
 #include <stdbool.h>
 
-#include "common_protocol.h"
+#include "client_protocol.h"
 
 typedef struct {
 	struct addrinfo hints;
@@ -19,8 +19,8 @@ typedef struct {
 //prepares the client to connect to the specified host and service
 void client_start(client_t* self, const char* hostname, const char* servicename);
 
-//attemps to connect and starts listening for local input
-//POS: returns exit value
+//attemps to connect and starts listening for local input which is sent to the server
+//POS: returns exit value, 0 if everything went smoothly -1 otherwise
 int client_connect(client_t* self);
 
 //finalize the client

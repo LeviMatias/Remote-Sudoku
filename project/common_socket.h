@@ -26,9 +26,11 @@ int socket_init(socket_t* self, struct addrinfo* ai);
 
 int socket_bind_and_listen(socket_t* self, struct addrinfo* ai);
 
+int socket_accept(socket_t* self, struct addrinfo* ai);
+
 int socket_send(socket_t* self, const char* buffer, size_t size);
 
-int socket_receive(socket_t* self, const char* buffer, size_t size);
+int socket_receive(socket_t* self, char* buffer, size_t size);
 
 bool socket_is_connected(socket_t* self);
 
