@@ -28,9 +28,9 @@ int socket_init(socket_t* self, struct addrinfo* ai);
 
 int socket_bind_and_listen(socket_t* self, const char* service);
 
-int socket_send(socket_t* self, const void* buffer, size_t length);
+int socket_send(socket_t* self, const char* buffer, size_t length);
 
-int socket_receive(socket_t* self, const void* buffer, size_t length);
+int socket_receive(socket_t* self, const char* buffer, size_t length);
 
 bool socket_is_connected(socket_t* self);
 

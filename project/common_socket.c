@@ -38,6 +38,35 @@ bool socket_is_connected(socket_t* self){
 	return (self->connected == CONNECTED);
 }
 
+int socket_send(socket_t* self, const char* buffer, size_t length){
+  int sent = 0;
+  int s = 0;
+  bool is_the_socket_valid = true;
+  printf("size: %zu\n", length);
+  printf("msg: %s\n", buffer);
+  while (sent < length && is_the_socket_valid) {
+    s = send(self->fd, &buffer[sent], length-sent, MSG_NOSIGNAL);
+
+    if (s == 0) {
+       is_the_socket_valid = false;
+    } else if (s == -1) {
+       is_the_socket_valid = false;
+    } else {
+       sent += s;
+    }
+  }
+
+  if (is_the_socket_valid) {
+    return length;
+  } else {
+    return -1;
+  }
+}
+
+int socket_receive(socket_t* self, const char* buffer, size_t length){
+  
+}
+
 void socket_release(socket_t* self){
 	if (socket_is_connected(self)){
 		close(self->fd);

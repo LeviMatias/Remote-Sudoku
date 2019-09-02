@@ -23,6 +23,7 @@ int client_connect(client_t* self){
 		char word[12+1];
 		if (fgets(word, sizeof(word), stdin)){
 			protocol_parse_client_input(&(self->protocol),word);
+			socket_send(&(self->socket), (self->protocol.msg), (self->protocol.msg_size));
 		}
 	}
 	return s;

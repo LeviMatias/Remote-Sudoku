@@ -1,23 +1,13 @@
 #ifndef __PROTOCOL_H__
 #define __PROTOCOL_H__
 
+#include "common_command.h"
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <stdbool.h>
 
-#define MAX_MESSAGE_LENGTH 4
-#define UPPER_BOUND "9"
-#define LOWER_BOUND "1"
-
-#define DELIM_WORDS " ,\n"
-#define GET "get"
-#define PUT "put"
-#define VER "verify"
-#define RES "reset"
-#define EXI "exit"
-
-extern const char commands[][7];
+extern const command_struct_t AVAILABLE_COMMANDS[];
 
 typedef struct {
 	//socket
