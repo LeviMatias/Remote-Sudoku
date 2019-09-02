@@ -9,10 +9,8 @@
 #include <stdbool.h>
 
 #include "common_protocol.h"
-#include "common_socket.h"
 
 typedef struct {
-	socket_t socket;
 	struct addrinfo hints;
 	struct addrinfo *result;
 	protocol_t protocol;

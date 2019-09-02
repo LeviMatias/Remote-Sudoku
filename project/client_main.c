@@ -18,12 +18,14 @@ void client_start(client_t* self, const char* hostname, const char* servicename)
 //POS: returns exit value
 int client_connect(client_t* self){
 	int s = 0;
-	s = socket_init(&(self->socket),self->result);
+	s = protocol_init(&(self->protocol), self->result);
 	if (s != -1){
 		char word[12+1];
 		if (fgets(word, sizeof(word), stdin)){
-			protocol_parse_client_input(&(self->protocol),word);
-			socket_send(&(self->socket), (self->protocol.msg), (self->protocol.msg_size));
+			int s = protocol_parse_client_input(&(self->protocol), word);
+			if (s == 0){
+				protocol_send(&(self->protocol));
+			}
 		}
 	}
 	return s;
@@ -31,6 +33,6 @@ int client_connect(client_t* self){
 
 //finalize the client
 void client_shutdown(client_t* self){
-	socket_release(&(self->socket));
+	protocol_release(&(self->protocol));
 	freeaddrinfo(self->result);
 }

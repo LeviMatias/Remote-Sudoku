@@ -11,6 +11,10 @@ const command_struct_t AVAILABLE_COMMANDS[] = {
 	{EXI, 1, &parse_single},
 };
 
+int protocol_init(protocol_t* self, struct addrinfo* ai){
+	return socket_init(&(self->socket),ai);
+}
+
 int protocol_parse_client_input(protocol_t* self, char* input){
 	char* cmd = strtok(input, DELIM_WORDS);
 	int s = 1;
@@ -27,4 +31,16 @@ int protocol_parse_client_input(protocol_t* self, char* input){
 		printf("Invalid command\n");
 	}
 	return s;
+}
+
+int protocol_send(protocol_t* self){
+	if (self->ready){
+		return socket_send(&(self->socket), (self->msg), (self->msg_size));
+	} else {
+		return 1;
+	}
+}
+
+void protocol_release(protocol_t* self){
+	socket_release(&(self->socket));
 }

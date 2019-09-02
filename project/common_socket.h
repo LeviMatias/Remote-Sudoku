@@ -24,13 +24,11 @@ typedef struct {
 //POS: returns 0 if succeeded -1 if not
 int socket_init(socket_t* self, struct addrinfo* ai);
 
-//int socket_connect(socket_t* self,const char* host, const char* service);
+int socket_bind_and_listen(socket_t* self, struct addrinfo* ai);
 
-int socket_bind_and_listen(socket_t* self, const char* service);
+int socket_send(socket_t* self, const char* buffer, size_t size);
 
-int socket_send(socket_t* self, const char* buffer, size_t length);
-
-int socket_receive(socket_t* self, const char* buffer, size_t length);
+int socket_receive(socket_t* self, const char* buffer, size_t size);
 
 bool socket_is_connected(socket_t* self);
 
