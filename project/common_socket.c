@@ -23,7 +23,7 @@ int socket_connect(socket_t* self, struct addrinfo* ptr){
       close(self->fd);
    } else {
     self->connected = 0;
-    printf("connected");
+    printf("connected\n");
    } 
   return s;
 }

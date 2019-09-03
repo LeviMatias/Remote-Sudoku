@@ -7,7 +7,7 @@ void server_start(server_t* self, const char* hostname, const char* servicename)
 	self->hints.ai_socktype = SOCK_STREAM; /* TCP */
 	self->hints.ai_flags = AI_PASSIVE;
 	//check host name
-	int s = getaddrinfo(hostname, servicename, &(self->hints), &(self->result));
+	int s = getaddrinfo(0, servicename, &(self->hints), &(self->result));
 	if (s != 0) { 
       printf("Error in getaddrinfo: %s\n", gai_strerror(s));
       return;
@@ -17,11 +17,11 @@ void server_start(server_t* self, const char* hostname, const char* servicename)
 int server_listen_for_client(server_t* self){
 	int s = protocol_init(&(self->protocol), self->result);
 	s = protocol_bind_and_listen(&(self->protocol), self->result);
-	s = protocol_accept_connection(&(self->protocol));
+	s = protocol_accept_connection(&(self->protocol), self->result);
 
-	while (){
+	while (s != -1){
 		s = protocol_receive(&(self->protocol), &(self->protocol.msg[0]), 1);
-		printf("success");
+		printf("success\n");
 		//s = protocol_process_command();
 	}
 	return s;

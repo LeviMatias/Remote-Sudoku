@@ -1,3 +1,6 @@
+#ifndef __PROTOCOL_H__
+#define __PROTOCOL_H__
+
 #include "common_socket.h"
 
 #include <string.h>
@@ -27,3 +30,5 @@ int protocol_send(protocol_t* self);
 int protocol_receive(protocol_t* self, char* buffer, size_t size);
 
 void protocol_release(protocol_t* self);
+
+#endif
