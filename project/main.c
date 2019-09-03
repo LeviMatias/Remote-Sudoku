@@ -7,13 +7,13 @@
 int main(int argc, char* argv[]) {
 
 	if (argc > 1 && strcmp(argv[1], CLIENT) == 0){
-		client_t client;
+		networkcomp_t client;
 		const char* port = "7777";
-		client_start(&client,"localhost",port);
-		if (client_connect(&client) != -1) {
-			client_play(&client);
+		network_component_start(&client,"localhost",port, false);
+		if (client_network_component_connect(&client) != -1) {
+			client_network_component_play(&client);
 		}
-		client_shutdown(&client);
+		network_component_shutdown(&client);
 	} else if (argc > 1 && strcmp(argv[1], SERVER) == 0){
 
 	} else {
