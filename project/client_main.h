@@ -17,9 +17,13 @@ typedef struct {
 //prepares the client to connect to the specified host and service
 void client_start(client_t* self, const char* hostname, const char* servicename);
 
-//attemps to connect and starts listening for local input which is sent to the server
+//attemps to connect
 //POS: returns exit value, 0 if everything went smoothly -1 otherwise
 int client_connect(client_t* self);
+
+//starts listening for local input which is sent to the server
+//POS: returns exit value, 0 if everything went smoothly -1 otherwise
+int client_play(client_t* self);
 
 //finalize the client
 void client_shutdown(client_t* self);

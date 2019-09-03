@@ -1,20 +1,24 @@
 #ifndef __SERVER_H__
 #define __SERVER_H__
 
-#include "common_socket.h"
+#include "server_protocol.h"
 
-typedef struct{
-	socket_t socket;
+#include <string.h>
+#include <stdio.h>
+#include <errno.h>
+#include <stdbool.h>
+
+typedef struct {
 	struct addrinfo hints;
 	struct addrinfo *result;
+	protocol_t protocol;
 } server_t;
 
-//starts a new instance of the server and begins to listen for connections
 void server_start(server_t* self, const char* hostname, const char* servicename);
 
-int server_listen(server_t*);
+int server_listen_for_client(server_t* self);
 
-//finalize the server
 void server_shutdown(server_t* self);
+
 
 #endif

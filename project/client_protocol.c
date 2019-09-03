@@ -10,6 +10,10 @@ const command_struct_t AVAILABLE_COMMANDS[] = {
 	{EXI, 0, &cmd_exit},
 };
 
+int protocol_connect_to_server(protocol_t* self, struct addrinfo* ai){
+	return socket_connect(&(self->socket),ai);
+}
+
 int protocol_parse_client_input(protocol_t* self, char* input){
 	char* cmd = strtok(input, DELIM_WORDS);
 	int s = -1;

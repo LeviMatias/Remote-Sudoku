@@ -3,33 +3,29 @@
 #include <errno.h>
 #include <string.h>
 
-const int socket_connect(int skt, const struct addrinfo* ptr){
-	int s = connect(skt, ptr->ai_addr, ptr->ai_addrlen);
-     if (s == -1) {
-        printf("Error in connection: %s\n", strerror(errno));
-        close(skt);
-     } else {
-     	printf("connected");
-     } 
-	return s;
-}
-
 int socket_init(socket_t* self, struct addrinfo* ai){
 	int skt = 0;
-	int are_we_connected = -1;
-	struct addrinfo* ptr;
+  self->connected = NOT_CONNECTED;
 
-	for (ptr = ai; ptr != NULL && are_we_connected == -1; ptr = ptr->ai_next) {
-      skt = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
-      if (skt == -1) {
-         printf("Error in socket init: %s\n", strerror(errno));
-      } else {
-      	 self->fd = skt;
-         are_we_connected = socket_connect(skt,ptr);
-         self->connected = are_we_connected;
-      }
-   }
-   return are_we_connected;
+  skt = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
+  if (skt == -1) {
+     printf("Error in socket init: %s\n", strerror(errno));
+  } else {
+  	 self->fd = skt;
+  }
+  return skt;
+}
+
+int socket_connect(socket_t* self, struct addrinfo* ptr){
+  int s = connect(self->fd, ptr->ai_addr, ptr->ai_addrlen);
+   if (s == -1) {
+      printf("Error in connection: %s\n", strerror(errno));
+      close(self->fd);
+   } else {
+    self->connected = 0;
+    printf("connected");
+   } 
+  return s;
 }
 
 bool socket_is_connected(socket_t* self){
@@ -64,6 +60,9 @@ int socket_send(socket_t* self, const char* buffer, size_t size){
 int socket_bind_and_listen(socket_t* self, struct addrinfo* ai){
   int s = -1;
   struct addrinfo* ptr;
+
+  int val = 1; //configure socket to reuse address if TIME WAIT
+  setsockopt(self->fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
 
   for (ptr = ai; ptr != NULL && s == -1; ptr = ptr->ai_next) {
     s = bind(self->fd, ptr->ai_addr, ptr->ai_addrlen);

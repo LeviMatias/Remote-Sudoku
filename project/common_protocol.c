@@ -13,6 +13,10 @@ int protocol_send(protocol_t* self){
 	}
 }
 
+int protocol_receive(protocol_t* self, char* buffer, size_t size){
+	return socket_receive(&(self->socket), buffer, size);
+}
+
 void protocol_release(protocol_t* self){
 	socket_release(&(self->socket));
 }
