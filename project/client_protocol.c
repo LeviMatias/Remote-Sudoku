@@ -3,11 +3,11 @@
 #define NUMBER_OF_AVAILABLE_COMMANDS 5
 
 const command_struct_t AVAILABLE_COMMANDS[] = {
-	{GET, 1, &cmd_parse_single},
-	{PUT, 4, &cmd_parse_coordinates},
-	{VER, 1, &cmd_parse_single},
-	{RES, 1, &cmd_parse_single},
-	{EXI, 0, &cmd_exit},
+	{GET, &cmd_parse_single},
+	{PUT, &cmd_parse_coordinates},
+	{VER, &cmd_parse_single},
+	{RES, &cmd_parse_single},
+	{EXI, &cmd_exit},
 };
 
 int protocol_connect_to_server(protocol_t* self, struct addrinfo* ai){

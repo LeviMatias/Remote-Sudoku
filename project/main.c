@@ -8,7 +8,7 @@
 int Client(const char* host, const char* service){
 	networkcomp_t client;
 	int s = network_component_start(&client, host, service, false);
-	if (client_network_component_connect(&client) != -1) {
+	if (s != -1 && client_network_component_connect(&client) != -1) {
 		s = client_network_component_play(&client);
 	}
 	network_component_shutdown(&client);

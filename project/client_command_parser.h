@@ -8,7 +8,6 @@
 
 typedef struct{
 	char* name;
-	int length;
 	int (*parse_function)(char*, size_t*, char*);//buffer, buffer size, cmd msg
 }command_struct_t;
 
