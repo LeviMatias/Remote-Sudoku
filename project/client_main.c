@@ -18,8 +18,8 @@ int client_network_component_connect(networkcomp_t* self){
 int client_network_component_play(networkcomp_t* self){
 	int s = -1;
 	char word[12+1];
-	while (fgets(word, sizeof(word), stdin) && s != EXIT_CODE){
-		int s = protocol_parse_client_input(&(self->protocol), word);
+	while ( s != EXIT_CODE && fgets(word, sizeof(word), stdin)){
+		s = protocol_parse_client_input(&(self->protocol), word);
 		if (s == 0){
 			protocol_send(&(self->protocol));
 			uint32_t msg_length;
