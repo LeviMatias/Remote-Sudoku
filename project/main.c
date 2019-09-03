@@ -19,21 +19,26 @@ int Server(const char* service){
 	networkcomp_t server;
 	int s = network_component_start(&server, 0, service, true);
 	server_network_component_listen_for_client(&server);
+	network_component_shutdown(&server);
 	return s;
 }
 
 int main(int argc, char* argv[]) {
 	const char* port = "7777";
 	const char* host = "localhost";
+	int s = 1;
 
 	if (argc > 1 && strcmp(argv[1], CLIENT) == 0){
-		Client(host, port);
+		s = Client(host, port);
 	} else if (argc > 1 && strcmp(argv[1], SERVER) == 0){
-		Server(port);
+		s = Server(port);
 	} else {
 		printf("Invalid mode, first parameter mus be one of the following\n");
 		printf("server\n");
 		printf("client\n");
 	}
-    return 0;
+	if (s == -1){
+		s = 1;
+	}
+    return s;
 }
