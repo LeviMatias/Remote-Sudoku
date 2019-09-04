@@ -13,6 +13,7 @@
 
 #define EXIT_CODE 1
 
+#define CMD_LENGTH 1
 #define PUT_LENGTH 4 //length in bytes of the msg
 #define VALUE_IS_IN 3
 #define ROW_IS_IN 1
