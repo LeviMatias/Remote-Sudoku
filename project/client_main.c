@@ -22,7 +22,7 @@ int client_network_component_play(networkcomp_t* self){
 	while ( s != EXIT_CODE && r > 0 && fgets(word, sizeof(word), stdin)){
 		s = protocol_parse_client_input(&(self->protocol), word);
 		if (s == 0){
-			protocol_send(&(self->protocol));
+			protocol_send(&(self->protocol), self->msg, self->msg_length);
 			uint32_t msg_length;
 			r = protocol_receive(&(self->protocol), (char*)&msg_length, sizeof(uint32_t));
 			if (r > 0){
