@@ -23,11 +23,11 @@ extern const server_command_struct_t AVAILABLE_SERVER_COMMANDS[];
 
 // attempts to identify command, 
 //POS if successful returns number of bytes needed to be received from client to execute
-// and sets the command to self.current_command
+// and sets the command to self.current_command, else returns -1
 int interpreter_identify_command(interpreter_t* self, char* cmd_code);
 
 //PRE it should have a previously identified command set as current_command
 //POS executes function over sudoku
-int interpreter_execute_command(interpreter_t* self, sudoku_t* sudoku);
+sudoku_message_t* interpreter_execute_command(interpreter_t* self, sudoku_t* sudoku, char* cmd);
 
 #endif

@@ -10,7 +10,7 @@ int client_network_component_connect(networkcomp_t* self){
 		}
 	}
 	if (s == -1){
-		printf("Could not connect: \n");
+		printf("Could not connect \n");
 	}
 	return s;
 }
@@ -30,6 +30,9 @@ int client_network_component_play(networkcomp_t* self){
 				char msg[msg_length];
 				r = protocol_receive(&(self->protocol), &(msg[0]), msg_length);
 				printf("print msg: %s\n", msg);
+			}
+			if (r  < 0 ){
+				printf("Connection forcefully terminated \n");
 			}
 		}
 	}

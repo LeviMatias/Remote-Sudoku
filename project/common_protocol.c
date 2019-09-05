@@ -1,6 +1,7 @@
 #include "common_protocol.h"
 
 int protocol_init(protocol_t* self, struct addrinfo* ai){
+	memset(&(self->msg), '0', MAX_MESSAGE_LENGTH+1);
 	return socket_init(&(self->socket),ai);
 }
 

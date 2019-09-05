@@ -28,7 +28,7 @@ typedef struct{
 }sudoku_t;
 
 //the command parameter holds the information needed to execute the command (ignored if none)
-//its used to standarize the input and easily map the functions
+//its used to standarize the arguments and easily map the functions
 
 //attemps to read a file and create the sudoku board from it
 //uses by default the filepath "board.txt" and assumes the file is well constructed

@@ -88,11 +88,10 @@ int socket_accept(socket_t* self, struct addrinfo* ai){
 
 int socket_receive(socket_t* self, char* buffer, size_t size){
   int received = 0;
-  int s = 0;
+  int s = 1;
 
   while (received < size && s > 0 && self->connected != -1) {
     s = recv(self->connected, &buffer[received], size-received, 0);
-
     if (s == -1) { // there was an error
       printf("Error: %s\n", strerror(errno));
     } else {
@@ -112,6 +111,7 @@ void socket_release(socket_t* self){
     if (self->connected != -1 && shutdown(self->connected, SHUT_RDWR) == -1){
       printf("Closing connection error: %s\n", strerror(errno));
     }
+    printf("Closing connection normally\n");
 		close(self->fd);
 	}
 }

@@ -19,8 +19,6 @@ void _sudoku_make_printboard(sudoku_t* self){
 }
 
 void _sudoku_add_value_to_printboard(sudoku_t* self, char* value, int x, int y){
-	printf("%d\n",x );
-	printf("%d\n",y );
 	strncpy((&(self->graphic_board[y*LINE_LENGTH]) + 2 + (x - 1)*4), value, 1);
 }
 
@@ -35,8 +33,7 @@ int sudoku_init(sudoku_t* self){
 	char c = fgetc(fd);
 	int x = 0;
 	while (!feof(fd)){
-		if (isdigit(c) > 0){
-			printf("%c\n",c );
+		if (isdigit(c) != 0){
 			strncpy(&(self->start_board[x % COLUMNS_AND_ROWS][(int)(x / COLUMNS_AND_ROWS)]), &c, 1);
 			strncpy(&(self->current_board[x % COLUMNS_AND_ROWS][(int)(x / COLUMNS_AND_ROWS)]), &c, 1);
 			_sudoku_add_value_to_printboard(self, &c, (x % COLUMNS_AND_ROWS) + 1, (int)(x / COLUMNS_AND_ROWS) + 1);
