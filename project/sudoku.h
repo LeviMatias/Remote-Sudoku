@@ -1,6 +1,8 @@
 #ifndef __SUDOKU_H__
 #define __SUDOKU_H__
 #include <stdio.h>
+#include <ctype.h>
+#include <string.h>
 
 //sudoku is played on a square board
 #define COLUMNS_AND_ROWS 9
@@ -17,13 +19,10 @@ typedef struct{
 	size_t size;
 }sudoku_message_t;
 
-typedef struct{
-	int cells[COLUMNS_AND_ROWS][COLUMNS_AND_ROWS];
-}board_t;
 
 typedef struct{
-	board_t start_board;
-	board_t current_board;
+	char start_board[COLUMNS_AND_ROWS][COLUMNS_AND_ROWS];
+	char current_board[COLUMNS_AND_ROWS][COLUMNS_AND_ROWS];
 	char graphic_board[BOARD_PRINT_SIZE]; 
 	sudoku_message_t msg;
 }sudoku_t;
@@ -40,14 +39,14 @@ sudoku_message_t* sudoku_verify(sudoku_t* self);
 
 //Attemps to position value in x:y, it also checks for win condition
 //POS returns a pointer to the sudoku msg with the return text
-sudoku_message_t* sudoku_place_value(sudoku_t* self, char* value, char* x, char* y);
+sudoku_message_t* sudoku_place_value(sudoku_t* self, char* value, int x, int y);
 
 //POS returns a pointer to the sudoku msg with the return text
-sudoku_message_t sudoku_print(sudoku_t* self);
+sudoku_message_t* sudoku_print(sudoku_t* self);
 
 //resets the sudoku board
 //POS returns a pointer to the sudoku msg with the return text
-sudoku_message_t sudoku_reset(sudoku_t* self);
+sudoku_message_t* sudoku_reset(sudoku_t* self);
 
 
 #endif
