@@ -24,7 +24,7 @@ void _sudoku_add_value_to_printboard(sudoku_t* self, char* value, int x, int y){
 	strncpy((&(self->graphic_board[y*LINE_LENGTH]) + 2 + (x - 1)*4), value, 1);
 }
 
-int sudoku_init_from_file(sudoku_t* self){
+int sudoku_init(sudoku_t* self){
 	FILE* fd = fopen("board.txt", "r");
 	if (fd == NULL){
 		//error!

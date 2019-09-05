@@ -17,14 +17,15 @@ int client_network_component_connect(networkcomp_t* self){
 
 int client_network_component_play(networkcomp_t* self){
 	int s = -1;
+	int r = 1;
 	char word[12+1];
-	while ( s != EXIT_CODE && fgets(word, sizeof(word), stdin)){
+	while ( s != EXIT_CODE && r > 0 && fgets(word, sizeof(word), stdin)){
 		s = protocol_parse_client_input(&(self->protocol), word);
 		if (s == 0){
 			protocol_send(&(self->protocol));
 			uint32_t msg_length;
-			int r = protocol_receive(&(self->protocol), (char*)&msg_length, sizeof(uint32_t));
-			if (r >= 0){
+			r = protocol_receive(&(self->protocol), (char*)&msg_length, sizeof(uint32_t));
+			if (r > 0){
 				msg_length = ntohl(msg_length);
 				char msg[msg_length];
 				r = protocol_receive(&(self->protocol), &(msg[0]), msg_length);

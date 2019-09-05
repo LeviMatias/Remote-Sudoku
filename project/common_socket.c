@@ -89,25 +89,21 @@ int socket_accept(socket_t* self, struct addrinfo* ai){
 int socket_receive(socket_t* self, char* buffer, size_t size){
   int received = 0;
   int s = 0;
-  int is_the_socket_valid = 1;
 
-  while (received < size && is_the_socket_valid > 0 && self->connected != -1) {
+  while (received < size && s > 0 && self->connected != -1) {
     s = recv(self->connected, &buffer[received], size-received, 0);
 
-    if (s == 0) { // socket is closed
-      is_the_socket_valid = false;
-    } else if (s == -1) { // there was an error
-      is_the_socket_valid = false;
+    if (s == -1) { // there was an error
       printf("Error: %s\n", strerror(errno));
     } else {
       received += s;
     }
   }
 
-  if (is_the_socket_valid > 0) {
+  if (s > 0) {
     return received;
   } else {
-    return is_the_socket_valid;
+    return s;
   }
 }
 
