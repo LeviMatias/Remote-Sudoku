@@ -29,7 +29,8 @@ typedef struct{
 }sudoku_t;
 
 //attemps to read a file and create the sudoku board from it
-//returns 0 if successful, -1 if not
+//uses by default the filepath "board.txt" and assumes the files is well constructed
+//POS returns 0 if successful, -1 if not
 int sudoku_init_from_file(sudoku_t* self);
 
 //verifies that every value is placed correctly
