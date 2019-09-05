@@ -27,6 +27,9 @@ typedef struct{
 	sudoku_message_t msg;
 }sudoku_t;
 
+//the command parameter holds the information needed to execute the command (ignored if none)
+//its used to standarize the input and easily map the functions
+
 //attemps to read a file and create the sudoku board from it
 //uses by default the filepath "board.txt" and assumes the file is well constructed
 //POS returns 0 if successful, -1 if not
@@ -35,18 +38,18 @@ int sudoku_init(sudoku_t* self);
 //verifies that every value is placed correctly
 //POS returns a pointer to the sudoku msg with the return text
 //message returns "OK" if all values are correctly placed, "Error" if not
-sudoku_message_t* sudoku_verify(sudoku_t* self);
+sudoku_message_t* sudoku_verify(sudoku_t* self, char* cmd);
 
 //Attemps to position value in x:y, it also checks for win condition
 //POS returns a pointer to the sudoku msg with the return text
-sudoku_message_t* sudoku_place_value(sudoku_t* self, char* value, int x, int y);
+sudoku_message_t* sudoku_place_value(sudoku_t* self, char* cmd);
 
 //POS returns a pointer to the sudoku msg with the return text
-sudoku_message_t* sudoku_print(sudoku_t* self);
+sudoku_message_t* sudoku_print(sudoku_t* self, char* cmd);
 
 //resets the sudoku board
 //POS returns a pointer to the sudoku msg with the return text
-sudoku_message_t* sudoku_reset(sudoku_t* self);
+sudoku_message_t* sudoku_reset(sudoku_t* self, char* cmd);
 
 
 #endif

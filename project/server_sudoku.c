@@ -49,13 +49,16 @@ int sudoku_init(sudoku_t* self){
 	return 0;
 }
 
-sudoku_message_t* sudoku_print(sudoku_t* self){
+sudoku_message_t* sudoku_print(sudoku_t* self, char* cmd){
 	self->msg.text = self->graphic_board;
 	self->msg.size = BOARD_PRINT_SIZE;
 	return &(self->msg);
 }
 
-sudoku_message_t* sudoku_place_value(sudoku_t* self, char* value, int x, int y){
+sudoku_message_t* sudoku_place_value(sudoku_t* self, char* cmd){
+	char* value = (&cmd[3]);
+	int x =(cmd[1]);
+	int y = (cmd[2]);
 	if (strcmp(&(self->start_board[x][y]), "0") != 0){ //trying to place on unmodifiable cell
 		self->msg.text = &(PUT_FAIL[0]);
 		self->msg.size = sizeof(PUT_FAIL);
@@ -63,18 +66,18 @@ sudoku_message_t* sudoku_place_value(sudoku_t* self, char* value, int x, int y){
 	} else {
 		strncpy(&(self->current_board[(x - 1)][(y - 1)]), value, 1);
 		_sudoku_add_value_to_printboard(self, &(self->current_board[(x - 1)][(y - 1)]), x, y);
-		return sudoku_print(self);
+		return sudoku_print(self, cmd);
 	}
 }
 
-sudoku_message_t* sudoku_reset(sudoku_t* self){
+sudoku_message_t* sudoku_reset(sudoku_t* self, char* cmd){
 	for (int i=0; i < COLUMNS_AND_ROWS; i++){
 		strncpy(self->current_board[i], self->start_board[i], COLUMNS_AND_ROWS);
 		for (int j =0; j < COLUMNS_AND_ROWS; j++){
 			_sudoku_add_value_to_printboard(self, &(self->start_board[i][j]), i + 1, j + 1);
 		}
 	}
-	return sudoku_print(self);
+	return sudoku_print(self, cmd);
 }
 
 /*

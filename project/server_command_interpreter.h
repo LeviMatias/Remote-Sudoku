@@ -2,7 +2,7 @@
 #define __S_CMD_INTERPRETER_H__
 
 #include "common_command.h"
-//include sudoku
+#include "server_sudoku.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -10,7 +10,7 @@
 typedef struct{
 	char* name;
 	size_t size;
-	int (*sudoku_function)(char*, size_t*, char*);//buffer, buffer size, cmd msg
+	sudoku_message_t* (*sudoku_function)(sudoku_t*, char*);//buffer, buffer size, cmd msg
 }server_command_struct_t;
 
 typedef struct{
@@ -26,6 +26,8 @@ extern const server_command_struct_t AVAILABLE_SERVER_COMMANDS[];
 // and sets the command to self.current_command
 int interpreter_identify_command(interpreter_t* self, char* cmd_code);
 
-int interpreter_execute_command(interpreter_t* self); //sudoku_t* sudoku
+//PRE it should have a previously identified command set as current_command
+//POS executes function over sudoku
+int interpreter_execute_command(interpreter_t* self, sudoku_t* sudoku);
 
 #endif

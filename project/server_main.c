@@ -16,7 +16,7 @@ int server_network_component_listen_for_client(networkcomp_t* self){
 			s = protocol_receive(&(self->protocol), &(self->protocol.msg[1]),res - 1);
 		}
 		if (s > 0){
-			interpreter_execute_command(&interpreter);
+			interpreter_execute_command(&interpreter, &sudoku);
 		}
 		//s = server_process_command(cmd, self->protocol.msg);
 		//send to client(); //client prints
