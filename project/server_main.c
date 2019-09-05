@@ -11,12 +11,10 @@ int server_network_component_listen_for_client(networkcomp_t* self){
 		s = protocol_receive(&(self->protocol), &(self->protocol.msg[0]), 1);
 		int res = interpreter_identify_command(&interpreter, &(self->protocol.msg[0]));
 		if (res > 1){
-			s = protocol_receive(&(self->protocol), &(self->protocol.msg[1]),(*cmd).size - 1);
+			s = protocol_receive(&(self->protocol), &(self->protocol.msg[1]),res - 1);
 		}
 		if (s > 0){
-			int reply_size 1; //get msg size
-			char reply[];
-			interpreter_execute_command(&interpreter, &(self->protocol.msg[1]));
+			interpreter_execute_command(&interpreter);
 		}
 		//s = server_process_command(cmd, self->protocol.msg);
 		//send to client(); //client prints

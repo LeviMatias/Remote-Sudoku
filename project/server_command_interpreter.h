@@ -9,7 +9,7 @@
 
 typedef struct{
 	char* name;
-	int size;
+	size_t size;
 	int (*sudoku_function)(char*, size_t*, char*);//buffer, buffer size, cmd msg
 }server_command_struct_t;
 
@@ -19,16 +19,13 @@ typedef struct{
 
 #define NUMBER_OF_AVAILABLE_SERVER_COMMANDS 4
 
-const server_command_struct_t AVAILABLE_SERVER_COMMANDS[] = {
-	{GET, CMD_LENGTH},// &sudoku_print},
-	{PUT, PUT_LENGTH},// &sudoku_place},
-	{VER, CMD_LENGTH},// &sudoku_verify},
-	{RES, CMD_LENGTH},// &sudoku_reset}
-};
+extern const server_command_struct_t AVAILABLE_SERVER_COMMANDS[];
 
-// attempts to identify command, if successful returns a pointer to the cmd, else returns a NULL pointer
-int interpreter_identify_command(interpreter_t self, char* cmd_code);
+// attempts to identify command, 
+//POS if successful returns number of bytes needed to be received from client to execute
+// and sets the command to self.current_command
+int interpreter_identify_command(interpreter_t* self, char* cmd_code);
 
-int interpreter_execute_command(interpreter_t* self, char* msg); //sudoku_t* sudoku
+int interpreter_execute_command(interpreter_t* self); //sudoku_t* sudoku
 
 #endif
