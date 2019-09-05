@@ -17,7 +17,7 @@ int cmd_parse_coordinates(char *buffer, size_t *buffer_size, char *cmd){
 	cmd = strtok(NULL, DELIM_WORDS);
 	while (cmd != NULL && (strcmp(PUT_STRUCTURE[*buffer_size],"X")  || strcmp(cmd,PUT_STRUCTURE[*buffer_size]) == 0 )){ 
 	//begin extracting parameters from the message
-		if (isdigit(*cmd)){
+		if (isdigit(*cmd) > 0){
 			if (*cmd > *UPPER_BOUND || *cmd < *LOWER_BOUND){
 				printf("Index error. Supported range: [1,9] inputted: %s\n",cmd);
 				return -1;

@@ -4,6 +4,7 @@
 #include "common_network_component.h"
 #include "server_protocol.h"
 #include "server_command_interpreter.h"
+#include "server_sudoku.h"
 
 #include <string.h>
 #include <stdio.h>
