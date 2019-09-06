@@ -25,7 +25,7 @@ void _sudoku_add_value_to_printboard(sudoku_t* self, char* value, int x, int y){
 	memcpy(&(self->graphic_board[pos]), value, 1);
 }
 
-int _sudoku_check_line(char* start_pos, int multiplier){
+int _sudoku_line_check(char* start_pos, int multiplier){
 	//for internal use, returns -1 if not ok, 0 if has 0
 	//and 1 if full and ok
 	int check[COLUMNS_AND_ROWS] = {0};
@@ -35,29 +35,29 @@ int _sudoku_check_line(char* start_pos, int multiplier){
 		int value = (start_pos[pos] - '0');
 		if (value == 0){
 			has_zero--;
-		} else if (check[value] != 0) {
+		} else if (check[value - 1] != 0) {// value goes from 1-9!
 			return -1;
 		} else {
-			check[value] = 1;
+			check[value - 1] = 1;
 		}
 	}
 	return (int)(has_zero/COLUMNS_AND_ROWS);
 }
 
-int _sudoku_check_square(char* square_start_pos){
+int _sudoku_square_check(char* square_start_pos){
 	//for internal use, returns -1 if not ok, 0 if has 0
 	// and 1 if full and ok
 	int check[COLUMNS_AND_ROWS] = {0};
 	int has_zero = COLUMNS_AND_ROWS;
 	for (int  i=0; i < COLUMNS_AND_ROWS; i++){
 		int pos = i%3 + ( (int)(i/3) ) * COLUMNS_AND_ROWS;
-		int value = square_start_pos[pos] - '0';
+		int value = square_start_pos[pos] - '0';//convert from char to int
 		if (value == 0){
 			has_zero--;
-		} else if (check[value] != 0) {
+		} else if (check[value - 1] != 0) {
 			return -1;
 		} else {
-			check[value] = 1;
+			check[value - 1] = 1;
 		}
 	}
 	return (int)(has_zero/COLUMNS_AND_ROWS);
@@ -98,14 +98,15 @@ sudoku_message_t* sudoku_verify(sudoku_t* self, char* cmd){
 	int verification = 0;
 	for (int i=0; i < COLUMNS_AND_ROWS; i++){
 		int pos = (i%3)*3 + ((int)(i/3))*9*3;
-		int s = _sudoku_check_square(&(self->current_board[pos]));
-		int s2 = _sudoku_check_line(&(self->current_board[i * COLUMNS_AND_ROWS]),1); //row
-		int s3 = _sudoku_check_line(&(self->current_board[i]),COLUMNS_AND_ROWS); //column
-		if (s < 0 || s2 < 0 || s3 < 0){
+		int s1 = _sudoku_square_check(&(self->current_board[pos]));
+		int s2 = _sudoku_line_check(&(self->current_board[i * COLUMNS_AND_ROWS]),1); //row
+		int s3 = _sudoku_line_check(&(self->current_board[i]),COLUMNS_AND_ROWS); //column
+		if (s1 < 0 || s2 < 0 || s3 < 0){
 			verification = -1;
+			printf("s1 %d , s2 %d s3 %d i %d \n", s1, s2 ,s3, i);
 			break;
 		} else {
-			verification += s + s2 + s3;
+			verification += s1 + s2 + s3;
 		}
 	}
 	if (verification == (COLUMNS_AND_ROWS * 3)){
