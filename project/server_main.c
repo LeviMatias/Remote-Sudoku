@@ -13,11 +13,11 @@ int server_network_component_listen_for_client(networkcomp_t* self){
 	while (r > 0){
 		r = protocol_receive(&(self->protocol), &(self->protocol.msg[0]), 1);// recv cmd key
 		if (r > 0){
-			int id_res = interpreter_identify_command(&interpreter, &(self->protocol.msg[0]));
-			if (id_res > 1){
-				r = protocol_receive(&(self->protocol), &(self->protocol.msg[1]), (r - 1));
+			int bytes_needed = interpreter_identify_command(&interpreter, &(self->protocol.msg[0]));
+			if (bytes_needed > 1){
+				r = protocol_receive(&(self->protocol), &(self->protocol.msg[1]), (bytes_needed - 1));
 			}
-			if ( id_res > 0 && r > 0){// check again because it may have requested more bytes
+			if (bytes_needed > 0 && r > 0){// check again because it may have requested more bytes
 				sudoku_message_t* sudoku_rv = interpreter_execute_command(&interpreter, &sudoku, self->protocol.msg);
 				uint32_t size = sudoku_rv->size;
 				size = htonl(size);

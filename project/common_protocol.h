@@ -14,7 +14,6 @@ typedef struct {
 	socket_t socket;
 	size_t msg_size;
 	char msg[MAX_MESSAGE_LENGTH+1];//used for default cmd communication
-	bool ready;
 } protocol_t;
 
 //initializes the socket and prepares the protocol to operate

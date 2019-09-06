@@ -17,13 +17,9 @@ int protocol_connect_to_server(protocol_t* self, struct addrinfo* ai){
 int protocol_parse_client_input(protocol_t* self, char* input){
 	char* cmd = strtok(input, DELIM_WORDS);
 	int s = -1;
-	self->ready = false;
 	for (int i=0; (cmd != NULL) & (i < NUMBER_OF_AVAILABLE_COMMANDS); i++){
 		if (strcmp(cmd, AVAILABLE_COMMANDS[i].name) == 0){
 			s = AVAILABLE_COMMANDS[i].parse_function(self->msg, &(self->msg_size), cmd);
-			if (s == 0){
-				self->ready = true;
-			}
 		}
 	}
 	if (s == -1 && cmd != NULL){

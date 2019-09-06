@@ -6,12 +6,7 @@ int protocol_init(protocol_t* self, struct addrinfo* ai){
 }
 
 int protocol_send(protocol_t* self, char* msg, size_t size){
-	if (self->ready){
-		return socket_send(&(self->socket), msg, size);
-	} else {
-		printf("There is no valid command set\n");
-		return -1;
-	}
+	return socket_send(&(self->socket), msg, size);
 }
 
 int protocol_receive(protocol_t* self, char* buffer, size_t size){

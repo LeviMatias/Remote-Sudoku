@@ -22,14 +22,15 @@ int client_network_component_play(networkcomp_t* self){
 	while ( s != EXIT_CODE && r > 0 && fgets(word, sizeof(word), stdin)){
 		s = protocol_parse_client_input(&(self->protocol), word);
 		if (s == 0){
-			protocol_send(&(self->protocol), self->protocol.msg, self->protocol.msg_size);
+			r = protocol_send(&(self->protocol), self->protocol.msg, self->protocol.msg_size);
 			uint32_t msg_length;
-			r = protocol_receive(&(self->protocol), (char*)&msg_length, sizeof(uint32_t));
+			r = protocol_receive(&(self->protocol), (char*)&msg_length, sizeof(uint32_t));//get server reply
 			if (r > 0){
 				msg_length = ntohl(msg_length);
-				char msg[msg_length];
+				char msg[(int)msg_length + 1];
+				memset(&(msg[0]), '\0', sizeof(msg));
 				r = protocol_receive(&(self->protocol), &(msg[0]), msg_length);
-				printf("print msg: %s\n", msg);
+				printf("%s\n", msg);
 			}
 			if (r  < 0 ){
 				printf("Connection forcefully terminated \n");

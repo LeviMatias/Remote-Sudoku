@@ -36,10 +36,8 @@ int socket_send(socket_t* self, const char* buffer, size_t size){
   int sent = 0;
   int s = 0;
   bool is_the_socket_valid = true;
-  //printf("size: %zu\n", size);
-  //printf("msg: %s\n", buffer);
   while (sent < size && is_the_socket_valid) {
-    s = send(self->fd, &buffer[sent], size-sent, MSG_NOSIGNAL);
+    s = send(self->connected, &buffer[sent], size-sent, MSG_NOSIGNAL);
 
     if (s == 0) {
        is_the_socket_valid = false;

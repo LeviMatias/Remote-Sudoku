@@ -5,6 +5,7 @@ const char common_separator[LINE_LENGTH] = "U---+---+---U---+---+---U---+---+---
 const char number_line[LINE_LENGTH] = "U 0 | 0 | 0 U 0 | 0 | 0 U 0 | 0 | 0 U\n";
 
 void _sudoku_make_printboard(sudoku_t* self){
+	//for internal use
 	for (int i = 0; i < 19; i++){
 		if ( i % 2  == 1){ //odd
 			strncpy(&(self->graphic_board[LINE_LENGTH*i]), &number_line[0], LINE_LENGTH);
@@ -19,7 +20,47 @@ void _sudoku_make_printboard(sudoku_t* self){
 }
 
 void _sudoku_add_value_to_printboard(sudoku_t* self, char* value, int x, int y){
-	strncpy((&(self->graphic_board[y*LINE_LENGTH]) + 2 + (x - 1)*4), value, 1);
+	//for internal use
+	int pos = (1 + 2*(y - 1))*LINE_LENGTH + 2 + (x - 1)*4;
+	strncpy(&(self->graphic_board[pos]), value, 1);
+}
+
+int _sudoku_check_line(char* start_pos, int multiplier){
+	//for internal use, returns -1 if not ok, 0 if has 0
+	//and 1 if full and ok
+	int check[COLUMNS_AND_ROWS] = {0};
+	int has_zero = COLUMNS_AND_ROWS;
+	for (int  i=0; i < COLUMNS_AND_ROWS; i++){
+		int pos = i * multiplier;
+		int value = (start_pos[pos] - '0');
+		if (value == 0){
+			has_zero--;
+		} else if (check[value] != 0) {
+			return -1;
+		} else {
+			check[value] = 1;
+		}
+	}
+	return (int)(has_zero/COLUMNS_AND_ROWS);
+}
+
+int _sudoku_check_square(char* square_start_pos){
+	//for internal use, returns -1 if not ok, 0 if has 0
+	// and 1 if full and ok
+	int check[COLUMNS_AND_ROWS] = {0};
+	int has_zero = COLUMNS_AND_ROWS;
+	for (int  i=0; i < COLUMNS_AND_ROWS; i++){
+		int pos = i%3 + ( (int)(i/3) ) * COLUMNS_AND_ROWS;
+		int value = square_start_pos[pos] - '0';
+		if (value == 0){
+			has_zero--;
+		} else if (check[value] != 0) {
+			return -1;
+		} else {
+			check[value] = 1;
+		}
+	}
+	return (int)(has_zero/COLUMNS_AND_ROWS);
 }
 
 int sudoku_init(sudoku_t* self){
@@ -34,14 +75,15 @@ int sudoku_init(sudoku_t* self){
 	int x = 0;
 	while (!feof(fd)){
 		if (isdigit(c) != 0){
-			strncpy(&(self->start_board[x % COLUMNS_AND_ROWS][(int)(x / COLUMNS_AND_ROWS)]), &c, 1);
-			strncpy(&(self->current_board[x % COLUMNS_AND_ROWS][(int)(x / COLUMNS_AND_ROWS)]), &c, 1);
-			_sudoku_add_value_to_printboard(self, &c, (x % COLUMNS_AND_ROWS) + 1, (int)(x / COLUMNS_AND_ROWS) + 1);
+			int y = (int)(x/COLUMNS_AND_ROWS);
+			int position = (x % COLUMNS_AND_ROWS) + COLUMNS_AND_ROWS * y;
+			strncpy(&(self->start_board[position]), &c, 1);
+			strncpy(&(self->current_board[position]), &c, 1);
+			_sudoku_add_value_to_printboard(self, &c, (x % COLUMNS_AND_ROWS) + 1, y + 1);
 			x++;
 		}
 		c = fgetc(fd);
 	}
-
 	fclose(fd);
 	return 0;
 }
@@ -52,26 +94,56 @@ sudoku_message_t* sudoku_print(sudoku_t* self, char* cmd){
 	return &(self->msg);
 }
 
+sudoku_message_t* sudoku_verify(sudoku_t* self, char* cmd){
+	int verification = 0;
+	for (int i=0; i < COLUMNS_AND_ROWS; i++){
+		int pos = (i%3)*3 + ((int)(i/3))*9*3;
+		int s = _sudoku_check_square(&(self->current_board[pos]));
+		int s2 = _sudoku_check_line(&(self->current_board[i * COLUMNS_AND_ROWS]),1); //row
+		int s3 = _sudoku_check_line(&(self->current_board[i]),COLUMNS_AND_ROWS); //column
+		if (s < 0 || s2 < 0 || s3 < 0){
+			verification = -1;
+			break;
+		} else {
+			verification += s + s2 + s3;
+		}
+	}
+	if (verification == (COLUMNS_AND_ROWS * 3)){
+		//number of checks * times checked
+		self->msg.text = WIN_MSG;
+		self->msg.size = sizeof(WIN_MSG);
+	} else if (verification == -1){
+		self->msg.text = VERIFY_ERR;
+		self->msg.size = sizeof(VERIFY_ERR);
+	} else {
+		self->msg.text = VERIFY_OK;
+		self->msg.size = sizeof(VERIFY_OK);
+	}
+	return &(self->msg);
+}
+
 sudoku_message_t* sudoku_place_value(sudoku_t* self, char* cmd){
-	char* value = (&cmd[3]);
-	int x =(cmd[1]);
-	int y = (cmd[2]);
-	if (strcmp(&(self->start_board[x][y]), "0") != 0){ //trying to place on unmodifiable cell
+	char* value = &(cmd[3]);
+	int x = (cmd[1] - '0');
+	int y = (cmd[2] - '0');
+	int position = (x - 1) + COLUMNS_AND_ROWS*(y - 1);
+	if (self->start_board[position] != '0'){ 
+	//trying to place on unmodifiable cell
 		self->msg.text = &(PUT_FAIL[0]);
 		self->msg.size = sizeof(PUT_FAIL);
 		return &(self->msg);
 	} else {
-		strncpy(&(self->current_board[(x - 1)][(y - 1)]), value, 1);
-		_sudoku_add_value_to_printboard(self, &(self->current_board[(x - 1)][(y - 1)]), x, y);
+		strncpy(&(self->current_board[position]), value, 1);
+		_sudoku_add_value_to_printboard(self, &(self->current_board[position]), x, y);
 		return sudoku_print(self, cmd);
 	}
 }
 
 sudoku_message_t* sudoku_reset(sudoku_t* self, char* cmd){
 	for (int i=0; i < COLUMNS_AND_ROWS; i++){
-		strncpy(self->current_board[i], self->start_board[i], COLUMNS_AND_ROWS);
+		strncpy(&(self->current_board[0]), &(self->start_board[0]), COLUMNS_AND_ROWS*COLUMNS_AND_ROWS);
 		for (int j =0; j < COLUMNS_AND_ROWS; j++){
-			_sudoku_add_value_to_printboard(self, &(self->start_board[i][j]), i + 1, j + 1);
+			_sudoku_add_value_to_printboard(self, &(self->start_board[i + COLUMNS_AND_ROWS*j]), i + 1, j + 1);
 		}
 	}
 	return sudoku_print(self, cmd);
