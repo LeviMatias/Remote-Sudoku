@@ -26,6 +26,7 @@ int Server(const char* service){
 int main(int argc, char* argv[]) {
 	const char* port = "7777";
 	const char* host = "localhost";
+	printf("to do get port, host and process return values, beatify server\n");
 	int s = 1;
 
 	if (argc > 1 && strcmp(argv[1], CLIENT) == 0){

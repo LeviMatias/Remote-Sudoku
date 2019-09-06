@@ -123,17 +123,18 @@ sudoku_message_t* sudoku_verify(sudoku_t* self, char* cmd){
 }
 
 sudoku_message_t* sudoku_place_value(sudoku_t* self, char* cmd){
-	char* value = &(cmd[3]);
-	int x = (cmd[1] - '0');
-	int y = (cmd[2] - '0');
+	char value = (cmd[3] + '0');//convert to number-char
+	int x = cmd[1];
+	int y = cmd[2];
 	int position = (x - 1) + COLUMNS_AND_ROWS*(y - 1);
+	printf("%d - %c - %d \n",cmd[1], self->start_board[position], cmd[2] );
 	if (self->start_board[position] != '0'){ 
 	//trying to place on unmodifiable cell
-		self->msg.text = &(PUT_FAIL[0]);
+		self->msg.text = PUT_FAIL;
 		self->msg.size = sizeof(PUT_FAIL);
 		return &(self->msg);
 	} else {
-		memcpy(&(self->current_board[position]), value, 1);
+		memcpy(&(self->current_board[position]), &value, 1);
 		_sudoku_add_value_to_printboard(self, &(self->current_board[position]), x, y);
 		return sudoku_print(self, cmd);
 	}

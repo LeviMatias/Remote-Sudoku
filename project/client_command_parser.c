@@ -1,6 +1,13 @@
 #include "client_command_parser.h"
 const char PUT_STRUCTURE[][3] = {"put","X","in","X","X"};
 
+void _cmd_order_buffer(char* buffer){
+	int aux = buffer[1];
+	buffer[ROW_IS_IN] = buffer[2];
+	buffer[COLUMN_IS_IN] = buffer[3]; 
+	buffer[VALUE_IS_IN] = aux;
+}
+
 int cmd_exit(char* buffer, size_t* buffer_size, char* cmd){
 	return EXIT_CODE;
 }
@@ -18,14 +25,19 @@ int cmd_parse_coordinates(char *buffer, size_t *buffer_size, char *cmd){
 	cmd = strtok(NULL, DELIM_WORDS);
 	while (cmd != NULL && (strcmp(PUT_STRUCTURE[i],"X") == 0  || strcmp(cmd,PUT_STRUCTURE[i]) == 0 )){ 
 	//begin extracting parameters from the message
-		long int numl = strtol(cmd, NULL ,10);
-		if (numl > UPPER_BOUND || numl < LOWER_BOUND){
-			printf("Index error. Supported range: [1,9] inputted: %s\n",cmd);
-			return -1;
-		} else {
-			uint8_t num = numl;
-			buffer[*buffer_size] = num;
-			(*buffer_size)++;
+		 if ( strcmp(cmd,PUT_STRUCTURE[i]) != 0){ // ignore in
+			char* mixed_text;
+			long int numl = strtol(cmd, &mixed_text ,10);
+			if (mixed_text == cmd || *mixed_text != '\0'){
+				return -1;
+			} else if ((numl > UPPER_BOUND || numl < LOWER_BOUND)){
+				printf("Index error. Supported range: [1,9] inputted: %s\n",cmd);
+				return -1;
+			} else {
+				uint8_t num = numl;
+				buffer[*buffer_size] = num;
+				(*buffer_size)++;
+			}
 		}
 		cmd = strtok(NULL, DELIM_WORDS);
 		i++;
@@ -33,9 +45,6 @@ int cmd_parse_coordinates(char *buffer, size_t *buffer_size, char *cmd){
 	if (*buffer_size != PUT_LENGTH){
 		return -1;
 	}
-	int aux = buffer[1];
-	buffer[ROW_IS_IN] = buffer[2];
-	buffer[COLUMN_IS_IN] = buffer[3]; 
-	buffer[VALUE_IS_IN] = aux;
+	_cmd_order_buffer(buffer);
 	return s;
 }
