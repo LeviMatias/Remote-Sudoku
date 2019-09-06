@@ -1,8 +1,8 @@
 #ifndef __COMMAND_H__
 #define __COMMAND_H__
 
-#define UPPER_BOUND "9"
-#define LOWER_BOUND "1"
+#define UPPER_BOUND 9
+#define LOWER_BOUND 1
 
 #define DELIM_WORDS " ,\n"
 #define GET "get"

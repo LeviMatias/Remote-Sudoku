@@ -18,12 +18,13 @@ int cmd_parse_coordinates(char *buffer, size_t *buffer_size, char *cmd){
 	cmd = strtok(NULL, DELIM_WORDS);
 	while (cmd != NULL && (strcmp(PUT_STRUCTURE[i],"X") == 0  || strcmp(cmd,PUT_STRUCTURE[i]) == 0 )){ 
 	//begin extracting parameters from the message
-		if (isdigit(*cmd) != 0){
-			if (*cmd > *UPPER_BOUND || *cmd < *LOWER_BOUND){
-				printf("Index error. Supported range: [1,9] inputted: %s\n",cmd);
-				return -1;
-			}
-			buffer[*buffer_size] = *cmd;
+		long int numl = strtol(cmd, NULL ,10);
+		if (numl > UPPER_BOUND || numl < LOWER_BOUND){
+			printf("Index error. Supported range: [1,9] inputted: %s\n",cmd);
+			return -1;
+		} else {
+			uint8_t num = numl;
+			buffer[*buffer_size] = num;
 			(*buffer_size)++;
 		}
 		cmd = strtok(NULL, DELIM_WORDS);

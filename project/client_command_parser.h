@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdint.h>
+#include <stdlib.h>
 
 typedef struct{
 	char* name;

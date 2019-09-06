@@ -8,12 +8,12 @@ void _sudoku_make_printboard(sudoku_t* self){
 	//for internal use
 	for (int i = 0; i < 19; i++){
 		if ( i % 2  == 1){ //odd
-			strncpy(&(self->graphic_board[LINE_LENGTH*i]), &number_line[0], LINE_LENGTH);
+			memcpy(&(self->graphic_board[LINE_LENGTH*i]), &number_line[0], LINE_LENGTH);
 		} else { // even
 			if (i % 6 == 0){//its inside the square
-				strncpy(&(self->graphic_board[LINE_LENGTH*i]), &square_separator[0], LINE_LENGTH);
+				memcpy(&(self->graphic_board[LINE_LENGTH*i]), &square_separator[0], LINE_LENGTH);
 			}else{
-				strncpy(&(self->graphic_board[LINE_LENGTH*i]), &common_separator[0], LINE_LENGTH);
+				memcpy(&(self->graphic_board[LINE_LENGTH*i]), &common_separator[0], LINE_LENGTH);
 			}
 		}
 	}
@@ -22,7 +22,7 @@ void _sudoku_make_printboard(sudoku_t* self){
 void _sudoku_add_value_to_printboard(sudoku_t* self, char* value, int x, int y){
 	//for internal use
 	int pos = (1 + 2*(y - 1))*LINE_LENGTH + 2 + (x - 1)*4;
-	strncpy(&(self->graphic_board[pos]), value, 1);
+	memcpy(&(self->graphic_board[pos]), value, 1);
 }
 
 int _sudoku_check_line(char* start_pos, int multiplier){
@@ -77,8 +77,8 @@ int sudoku_init(sudoku_t* self){
 		if (isdigit(c) != 0){
 			int y = (int)(x/COLUMNS_AND_ROWS);
 			int position = (x % COLUMNS_AND_ROWS) + COLUMNS_AND_ROWS * y;
-			strncpy(&(self->start_board[position]), &c, 1);
-			strncpy(&(self->current_board[position]), &c, 1);
+			memcpy(&(self->start_board[position]), &c, 1);
+			memcpy(&(self->current_board[position]), &c, 1);
 			_sudoku_add_value_to_printboard(self, &c, (x % COLUMNS_AND_ROWS) + 1, y + 1);
 			x++;
 		}
@@ -133,15 +133,15 @@ sudoku_message_t* sudoku_place_value(sudoku_t* self, char* cmd){
 		self->msg.size = sizeof(PUT_FAIL);
 		return &(self->msg);
 	} else {
-		strncpy(&(self->current_board[position]), value, 1);
+		memcpy(&(self->current_board[position]), value, 1);
 		_sudoku_add_value_to_printboard(self, &(self->current_board[position]), x, y);
 		return sudoku_print(self, cmd);
 	}
 }
 
 sudoku_message_t* sudoku_reset(sudoku_t* self, char* cmd){
+	memcpy(&(self->current_board[0]), &(self->start_board[0]), COLUMNS_AND_ROWS*COLUMNS_AND_ROWS);
 	for (int i=0; i < COLUMNS_AND_ROWS; i++){
-		strncpy(&(self->current_board[0]), &(self->start_board[0]), COLUMNS_AND_ROWS*COLUMNS_AND_ROWS);
 		for (int j =0; j < COLUMNS_AND_ROWS; j++){
 			_sudoku_add_value_to_printboard(self, &(self->start_board[i + COLUMNS_AND_ROWS*j]), i + 1, j + 1);
 		}
