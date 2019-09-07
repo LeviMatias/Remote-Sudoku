@@ -33,10 +33,10 @@ int client_network_component_play(networkcomp_t* self){
 			if (r > 0){
 				bytes_to_rcv = ntohl(bytes_to_rcv);
 				r = protocol_receive(prtcl_ptr, msg, bytes_to_rcv);
-				printf("%s\n", msg);
+				printf("%s", msg);
 			}
 			if (r < 0){
-				printf("Connection forcefully terminated \n");
+				fprintf(stderr,"Connection forcefully terminated \n");
 			}
 		}
 	}

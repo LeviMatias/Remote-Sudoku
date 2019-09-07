@@ -23,7 +23,6 @@ int socket_connect(socket_t* self, struct addrinfo* ptr){
       close(self->fd);
    } else {
     self->connected = self->fd;
-    printf("connected\n");
    } 
   return s;
 }
@@ -109,7 +108,9 @@ void socket_release(socket_t* self){
     if (self->connected != -1 && shutdown(self->connected, SHUT_RDWR) == -1){
       printf("Closing connection error: %s\n", strerror(errno));
     }
-    printf("Closing connection normally\n");
+    if (self->connected != -1 && self->connected != self->fd){
+      close(self->connected);
+    }
 		close(self->fd);
 	}
 }

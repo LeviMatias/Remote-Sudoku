@@ -6,14 +6,14 @@
 #include <stdint.h>
 
 //sudoku is played on a square board
-#define LEN 9 //common board length
+#define LEN 9 //common board line length
 #define LEN2 38 //draw_board line length
 #define BOARD_PRINT_SIZE 722
 
-#define WIN_MSG "You win"
-#define VERIFY_OK "OK"
-#define VERIFY_ERR "ERROR"
-#define PUT_FAIL "Cell is not modifiable"
+#define WIN_MSG "You win\n"
+#define VERIFY_OK "OK\n"
+#define VERIFY_ERR "ERROR\n"
+#define PUT_FAIL "La celda indicada no es modificable\n"
 
 typedef struct{
 	char* text;
@@ -22,8 +22,8 @@ typedef struct{
 
 
 typedef struct{
-	char ini_board[LEN * LEN];
-	char main_board[LEN * LEN];
+	uint8_t ini_board[LEN * LEN];
+	uint8_t main_board[LEN * LEN];
 	char draw_board[BOARD_PRINT_SIZE]; 
 	sudoku_message_t msg;
 }sudoku_t;
@@ -32,7 +32,7 @@ typedef struct{
 //its used to standarize the arguments and easily map the functions and
 
 //attemps to read a file and create the sudoku board from it
-//by default the filepath "board.txt" and assumes the file is well constructed
+//by default the filepath "board.txt"
 //POS returns 0 if successful, -1 if not
 int sudoku_init(sudoku_t* self);
 

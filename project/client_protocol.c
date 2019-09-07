@@ -22,10 +22,10 @@ int protocol_parse_client_input(protocol_t* self, char* input){
 		if (strcmp(cmd_code, AVAILABLE_COMMANDS[i].name) == 0){
 			s = AVAILABLE_COMMANDS[i].parse_function(\
 				self->msg, &(self->msg_size), cmd_code, saveptr);
+			if (s == -1){
+				break;
+			}
 		}
-	}
-	if (s == -1 && cmd_code != NULL){
-		printf("Invalid command\n");
 	}
 	return s;
 }

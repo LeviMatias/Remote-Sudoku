@@ -21,7 +21,7 @@ int Client(const char* host, const char* service){
 int Server(const char* service){
 	networkcomp_t server;
 	int s = network_component_start(&server, 0, service, true);
-	if (s != - 1){
+	if (s != -1){
 		s = server_network_component_listen_for_client(&server);
 	}
 	if (s != 1){
@@ -32,19 +32,24 @@ int Server(const char* service){
 }
 
 int main(int argc, char* argv[]) {
-	const char* port = "7777";
-	const char* host = "localhost";
-	printf("to do get port, host and process return values, beatify server\n");
 	int s = 1;
 
 	if (argc > 1 && strcmp(argv[1], CLIENT) == 0){
-		s = Client(host, port);
+		if (argc == 4){
+			s = Client(argv[2], argv[3]);
+		} else {
+			s = 1;
+			printf("Uso: ./tp client <host> <puerto>\n");
+		}
 	} else if (argc > 1 && strcmp(argv[1], SERVER) == 0){
-		s = Server(port);
+		if (argc == 3){
+			s = Server(argv[2]);
+		} else {
+			s = 1;
+			printf("Uso: ./tp server <puerto>\n");
+		}
 	} else {
-		printf("Invalid mode, first parameter mus be one of the following\n");
-		printf("server\n");
-		printf("client\n");
+		printf("Modo no soportado, el primer parámetro debe ser server o client\n");
 	}
 	if (s == -1){
 		s = 1;

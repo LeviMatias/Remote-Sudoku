@@ -33,14 +33,21 @@ int cmd_parse_coordinates(char *buffer, size_t *buffer_size,\
 			long int numl = strtol(cmd, &mixed_text ,10);
 			if (mixed_text == cmd || *mixed_text != '\0'){
 				return -1;
-			} else if ((numl > UPPER_BOUND || numl < LOWER_BOUND)){
+			} else if (numl > UPPER_BOUND || numl < LOWER_BOUND){
+				if (*buffer_size > 2){ //this means we already got the value
+					fprintf(stderr,\
+					 "Error en los índices. Rango soportado: [1,9]\n");
+				} else {
+					fprintf(stderr,\
+					 "Error en el valor ingresado. Rango soportado: [1,9]\n");
+				}
 				return -1;
 			} else {
 				uint8_t num = numl;
 				buffer[*buffer_size] = num;
 				(*buffer_size)++;
 			}
-		} else if(strcmp(cmd,PUT_STRUCTURE[i]) != 0){
+		} else if (strcmp(cmd,PUT_STRUCTURE[i]) != 0){
 			return - 1;
 		}
 		cmd = strtok_r(NULL, DELIM_WORDS, &saveptr);
