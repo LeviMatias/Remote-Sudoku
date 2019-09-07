@@ -29,6 +29,7 @@ int protocol_send(protocol_t* self, char* msg, size_t size);
 //POS returns -1 if not successful, otherwise returns number of bytes received
 int protocol_receive(protocol_t* self, char* buffer, size_t size);
 
+//releases the resource
 void protocol_release(protocol_t* self);
 
 #endif

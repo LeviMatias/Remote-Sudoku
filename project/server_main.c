@@ -3,14 +3,22 @@
 
 int server_network_component_listen_for_client(networkcomp_t* self){
 	int s = protocol_init(&(self->protocol), self->result);
-	s = protocol_bind_and_listen(&(self->protocol), self->result);
-	s = protocol_accept_connection(&(self->protocol), self->result);
+	if (s != -1){
+		s = protocol_bind_and_listen(&(self->protocol), self->result);
+	}
+	if (s != -1){
+		s = protocol_accept_connection(&(self->protocol), self->result);
+	}
+	return s;
+}
+
+int server_network_component_play(networkcomp_t* self){
 	interpreter_t interpreter;
 	sudoku_t sudoku;
-	s = sudoku_init(&sudoku);
+	int s = sudoku_init(&sudoku);
 
 	int r = 1;
-	while (r > 0){
+	while (r > 0 && s != -1){
 		//recv cmd key
 		r = protocol_receive(&(self->protocol), &(self->protocol.msg[0]), 1);
 		if (r > 0){
@@ -26,12 +34,12 @@ int server_network_component_listen_for_client(networkcomp_t* self){
 									&interpreter, &sudoku, self->protocol.msg);
 				uint32_t size = sudoku_rv->size;
 				size = htonl(size);
-				protocol_send(&(self->protocol), (char*)&size,\
+				r = protocol_send(&(self->protocol), (char*)&size,\
 							 sizeof(uint32_t));
-				protocol_send(&(self->protocol), sudoku_rv->text,\
+				r = protocol_send(&(self->protocol), sudoku_rv->text,\
 								sudoku_rv->size);
 			}
 		}
 	}
-	return s;
+	return r;
 }

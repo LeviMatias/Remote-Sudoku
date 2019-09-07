@@ -22,10 +22,11 @@ int cmd_exit(char* buffer, size_t* buffer_size,\
 //cmd, bufferSize is set to 1;
 //returns 0 if successful, -1 otherwise
 int cmd_parse_single(char* buffer, size_t* buffer_size,\
-					char* cmd_code, char* cmd);
+					char* cmd_code, char* input);
 
 //POS: parses cmd until EOL, attemps to find a single value and 2 
 //coordinates (X:Y) in the [1;9] range
+//input param is tokenized
 //returns 0 if successful, -1 otherwise
 int cmd_parse_coordinates(char* buffer, size_t* buffer_size, 
 	char* cmd_code, char* input);

@@ -8,7 +8,10 @@
 int Client(const char* host, const char* service){
 	networkcomp_t client;
 	int s = network_component_start(&client, host, service, false);
-	if (s != -1 && client_network_component_connect(&client) != -1) {
+	if (s != -1){
+		s = client_network_component_connect(&client);
+	} 
+	if (s != -1){ // if it could not connect
 		s = client_network_component_play(&client);
 	}
 	network_component_shutdown(&client);
@@ -18,7 +21,12 @@ int Client(const char* host, const char* service){
 int Server(const char* service){
 	networkcomp_t server;
 	int s = network_component_start(&server, 0, service, true);
-	server_network_component_listen_for_client(&server);
+	if (s != - 1){
+		s = server_network_component_listen_for_client(&server);
+	}
+	if (s != 1){
+		s = server_network_component_play(&server);
+	}
 	network_component_shutdown(&server);
 	return s;
 }

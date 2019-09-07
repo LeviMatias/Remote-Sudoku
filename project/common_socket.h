@@ -33,11 +33,14 @@ int socket_bind_and_listen(socket_t* self, struct addrinfo* ai);
 //POS returns connection fd and sets it to self->connected, -1 if not successful
 int socket_accept(socket_t* self, struct addrinfo* ai);
 
+//Attemps to send #size bytes stored in buffer
+//POS returns bytes sent or -1 if not successful
 int socket_send(socket_t* self, const char* buffer, size_t size);
 
 //POS returns number of bytes received, 0 if connection is closed, -1 if error
 int socket_receive(socket_t* self, char* buffer, size_t size);
 
+//POS returns true if socket is connected to a channel
 bool socket_is_connected(socket_t* self);
 
 void socket_release(socket_t* self);
