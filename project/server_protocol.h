@@ -10,3 +10,4 @@ int protocol_bind_and_listen(protocol_t* self, struct addrinfo* ai);
 int protocol_accept_connection(protocol_t* self, struct addrinfo* ai);
 
 #endif
+

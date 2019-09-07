@@ -8,12 +8,13 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-#define MAX_MESSAGE_LENGTH 4 //in bytes
+#define MAX_MESSAGE_LENGTH 722 //in bytes
 
 typedef struct {
 	socket_t socket;
 	size_t msg_size;
-	char msg[MAX_MESSAGE_LENGTH+1];//used for default cmd communication
+	//used for standard communication
+	char msg[MAX_MESSAGE_LENGTH+1];
 } protocol_t;
 
 //initializes the socket and prepares the protocol to operate

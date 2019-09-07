@@ -6,8 +6,8 @@
 #include <stdint.h>
 
 //sudoku is played on a square board
-#define COLUMNS_AND_ROWS 9
-#define LINE_LENGTH 38
+#define LEN 9 //common board length
+#define LEN2 38 //draw_board line length
 #define BOARD_PRINT_SIZE 722
 
 #define WIN_MSG "You win"
@@ -22,17 +22,17 @@ typedef struct{
 
 
 typedef struct{
-	char start_board[COLUMNS_AND_ROWS * COLUMNS_AND_ROWS];
-	char current_board[COLUMNS_AND_ROWS * COLUMNS_AND_ROWS];
-	char graphic_board[BOARD_PRINT_SIZE]; 
+	char ini_board[LEN * LEN];
+	char main_board[LEN * LEN];
+	char draw_board[BOARD_PRINT_SIZE]; 
 	sudoku_message_t msg;
 }sudoku_t;
 
-//the cmd parameter holds the information needed to execute the command (ignored if none)
-//its used to standarize the arguments and easily map the functions
+//the cmd parameter holds the information needed to execute the command
+//its used to standarize the arguments and easily map the functions and
 
 //attemps to read a file and create the sudoku board from it
-//uses by default the filepath "board.txt" and assumes the file is well constructed
+//by default the filepath "board.txt" and assumes the file is well constructed
 //POS returns 0 if successful, -1 if not
 int sudoku_init(sudoku_t* self);
 

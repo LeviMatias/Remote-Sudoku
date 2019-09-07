@@ -1,5 +1,5 @@
 #include "client_command_parser.h"
-const char PUT_STRUCTURE[][3] = {"put","X","in","X","X"};
+const char PUT_STRUCTURE[][4] = {"put\0","X\0","in\0","X\0","X\0"};
 
 void _cmd_order_buffer(char* buffer){
 	int aux = buffer[1];
@@ -8,38 +8,42 @@ void _cmd_order_buffer(char* buffer){
 	buffer[VALUE_IS_IN] = aux;
 }
 
-int cmd_exit(char* buffer, size_t* buffer_size, char* cmd){
+int cmd_exit(char* buffer, size_t* buffer_size,\
+			char* cmd_code, char* input){
 	return EXIT_CODE;
 }
 
-int cmd_parse_single(char* buffer, size_t* buffer_size, char* cmd){
-	buffer[0] = toupper(*cmd);
+int cmd_parse_single(char* buffer, size_t* buffer_size,\
+					char* cmd_code,char* input){
+	buffer[0] = toupper(*cmd_code);
 	*buffer_size = 1;
 	return 0;
 }
 
-int cmd_parse_coordinates(char *buffer, size_t *buffer_size, char *cmd){
-	int s = cmd_parse_single(buffer, buffer_size, cmd);
+int cmd_parse_coordinates(char *buffer, size_t *buffer_size,\
+							 char* cmd_code, char *input){
+	int s = cmd_parse_single(buffer, buffer_size, cmd_code, input);
 	int i = 1;
-
-	cmd = strtok(NULL, DELIM_WORDS);
-	while (cmd != NULL && (strcmp(PUT_STRUCTURE[i],"X") == 0  || strcmp(cmd,PUT_STRUCTURE[i]) == 0 )){ 
-	//begin extracting parameters from the message
-		 if ( strcmp(cmd,PUT_STRUCTURE[i]) != 0){ // ignore in
+	char* saveptr = NULL;
+	char* cmd = strtok_r(input, DELIM_WORDS, &saveptr);
+	while (cmd != NULL && (strcmp(PUT_STRUCTURE[i],"X\0") == 0 \
+						|| strcmp(cmd,PUT_STRUCTURE[i]) == 0)){ 
+		if (strcmp(PUT_STRUCTURE[i],"X\0") == 0){
 			char* mixed_text;
 			long int numl = strtol(cmd, &mixed_text ,10);
 			if (mixed_text == cmd || *mixed_text != '\0'){
 				return -1;
 			} else if ((numl > UPPER_BOUND || numl < LOWER_BOUND)){
-				printf("Index error. Supported range: [1,9] inputted: %s\n",cmd);
 				return -1;
 			} else {
 				uint8_t num = numl;
 				buffer[*buffer_size] = num;
 				(*buffer_size)++;
 			}
+		} else if(strcmp(cmd,PUT_STRUCTURE[i]) != 0){
+			return - 1;
 		}
-		cmd = strtok(NULL, DELIM_WORDS);
+		cmd = strtok_r(NULL, DELIM_WORDS, &saveptr);
 		i++;
 	}
 	if (*buffer_size != PUT_LENGTH){

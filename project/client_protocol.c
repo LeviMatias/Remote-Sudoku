@@ -15,15 +15,18 @@ int protocol_connect_to_server(protocol_t* self, struct addrinfo* ai){
 }
 
 int protocol_parse_client_input(protocol_t* self, char* input){
-	char* cmd = strtok(input, DELIM_WORDS);
+	char* saveptr;
+	char* cmd_code = strtok_r(input, DELIM_WORDS, &saveptr);
 	int s = -1;
-	for (int i=0; (cmd != NULL) & (i < NUMBER_OF_AVAILABLE_COMMANDS); i++){
-		if (strcmp(cmd, AVAILABLE_COMMANDS[i].name) == 0){
-			s = AVAILABLE_COMMANDS[i].parse_function(self->msg, &(self->msg_size), cmd);
+	for (int i=0; (cmd_code != NULL) & (i < NUMBER_OF_AVAILABLE_COMMANDS); i++){
+		if (strcmp(cmd_code, AVAILABLE_COMMANDS[i].name) == 0){
+			s = AVAILABLE_COMMANDS[i].parse_function(\
+				self->msg, &(self->msg_size), cmd_code, saveptr);
 		}
 	}
-	if (s == -1 && cmd != NULL){
+	if (s == -1 && cmd_code != NULL){
 		printf("Invalid command\n");
 	}
 	return s;
 }
+

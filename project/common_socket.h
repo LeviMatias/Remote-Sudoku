@@ -43,3 +43,4 @@ bool socket_is_connected(socket_t* self);
 void socket_release(socket_t* self);
 
 #endif
+

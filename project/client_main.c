@@ -19,20 +19,23 @@ int client_network_component_play(networkcomp_t* self){
 	int s = -1;
 	int r = 1;
 	char word[12+1];
-	while ( s != EXIT_CODE && r > 0 && fgets(word, sizeof(word), stdin)){
-		s = protocol_parse_client_input(&(self->protocol), word);
+	protocol_t* prtcl_ptr = &(self->protocol);
+	char* msg = prtcl_ptr->msg;
+	while (s != EXIT_CODE && r > 0 && fgets(word, sizeof(word), stdin)){
+		s = protocol_parse_client_input(prtcl_ptr, word);
 		if (s == 0){
-			r = protocol_send(&(self->protocol), self->protocol.msg, self->protocol.msg_size);
-			uint32_t msg_length;
-			r = protocol_receive(&(self->protocol), (char*)&msg_length, sizeof(uint32_t));//get server reply
+			r = protocol_send(prtcl_ptr, msg, prtcl_ptr->msg_size);
+
+			uint32_t bytes_to_rcv;
+			r = protocol_receive(prtcl_ptr,\
+			 (char*)&bytes_to_rcv, sizeof(uint32_t));//get server reply
+
 			if (r > 0){
-				msg_length = ntohl(msg_length);
-				char msg[(int)msg_length + 1];
-				memset(&(msg[0]), '\0', sizeof(msg));
-				r = protocol_receive(&(self->protocol), &(msg[0]), msg_length);
+				bytes_to_rcv = ntohl(bytes_to_rcv);
+				r = protocol_receive(prtcl_ptr, msg, bytes_to_rcv);
 				printf("%s\n", msg);
 			}
-			if (r  < 0 ){
+			if (r < 0){
 				printf("Connection forcefully terminated \n");
 			}
 		}
@@ -42,3 +45,4 @@ int client_network_component_play(networkcomp_t* self){
 	}
 	return s;
 }
+
