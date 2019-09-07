@@ -34,7 +34,7 @@ int cmd_parse_coordinates(char *buffer, size_t *buffer_size,\
 			if (mixed_text == cmd || *mixed_text != '\0'){
 				return -1;
 			} else if (numl > UPPER_BOUND || numl < LOWER_BOUND){
-				if (*buffer_size > 2){ //this means we already got the value
+				if (*buffer_size > 1){ //this means we already got the value
 					fprintf(stderr,\
 					 "Error en los índices. Rango soportado: [1,9]\n");
 				} else {

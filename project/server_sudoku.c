@@ -153,7 +153,7 @@ sudoku_message_t* sudoku_reset(sudoku_t* self, char* cmd){
 	memcpy(&(self->main_board[0]), &(self->ini_board[0]), LEN*LEN);
 	for (int i=0; i < LEN; i++){
 		for (int j =0; j < LEN; j++){
-			_sudoku_add_value_to_dboard(self, &(self->ini_board[i + LEN*j]),\
+			_sudoku_add_value_to_dboard(self, &(self->ini_board[j + LEN*i]),\
 										 i + 1, j + 1);
 		}
 	}
