@@ -1,7 +1,7 @@
 #include "server_command_interpreter.h"
 
 const srv_command_struct_t SERVER_COMMANDS[] = {
-	{GET, CMD_LENGTH, &sudoku_print},
+	{GET, CMD_LENGTH, &sudoku_print_board},
 	{PUT, PUT_LENGTH, &sudoku_place_value},
 	{VER, CMD_LENGTH, &sudoku_verify},
 	{RES, CMD_LENGTH, &sudoku_reset}
@@ -20,7 +20,7 @@ int interpreter_identify_command(interpreter_t* self, char* inputted_code){
 	return -1;
 }
 
-sudoku_message_t* interpreter_execute_command(interpreter_t* self,\
+common_message_t* interpreter_execute_command(interpreter_t* self,\
 											 sudoku_t* sudoku, char* cmd){
 	return self->current_command->sudoku_function(sudoku, cmd);
 }

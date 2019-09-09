@@ -2,6 +2,7 @@
 #define __PROTOCOL_H__
 
 #include "common_socket.h"
+#include "common_message.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -12,9 +13,7 @@
 
 typedef struct {
 	socket_t socket;
-	size_t msg_size;
-	//used for standard communication
-	char msg[MAX_MESSAGE_LENGTH+1];
+	common_message_t msg;
 } protocol_t;
 
 //initializes the socket and prepares the protocol to operate

@@ -10,7 +10,7 @@
 typedef struct{
 	char* name;
 	size_t size;
-	sudoku_message_t* (*sudoku_function)(sudoku_t*, char*);
+	common_message_t* (*sudoku_function)(sudoku_t*, char*);
 }srv_command_struct_t;
 
 typedef struct{
@@ -28,7 +28,7 @@ int interpreter_identify_command(interpreter_t* self, char* cmd_code);
 
 //PRE it should have a previously identified command set as current_command
 //POS executes function over sudoku
-sudoku_message_t* interpreter_execute_command(interpreter_t* self,\
+common_message_t* interpreter_execute_command(interpreter_t* self,\
 										sudoku_t* sudoku, char* cmd);
 
 #endif

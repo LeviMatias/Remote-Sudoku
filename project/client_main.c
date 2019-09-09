@@ -20,11 +20,11 @@ int client_network_component_play(networkcomp_t* self){
 	int r = 1;
 	char word[12+1];
 	protocol_t* prtcl_ptr = &(self->protocol);
-	char* msg = prtcl_ptr->msg;
+	char* msg = prtcl_ptr->msg.text;
 	while (s != EXIT_CODE && r > 0 && fgets(word, sizeof(word), stdin)){
 		s = protocol_parse_client_input(prtcl_ptr, word);
 		if (s == 0){
-			r = protocol_send(prtcl_ptr, msg, prtcl_ptr->msg_size);
+			r = protocol_send(prtcl_ptr, msg, prtcl_ptr->msg.size);
 
 			uint32_t bytes_to_rcv;
 			r = protocol_receive(prtcl_ptr,\

@@ -69,7 +69,14 @@ int _sudoku_square_check(uint8_t* square_start_pos){
 	return (int)(has_zero/LEN);
 }
 
-int sudoku_init(sudoku_t* self){
+common_message_t* _sudoku_print_msg(sudoku_t* self, char* print, size_t size){
+	//for internal use
+	memcpy(self->msg->text, print, size);
+	self->msg->size = size;
+	return (self->msg);
+}
+
+int sudoku_init(sudoku_t* self, common_message_t *msg){
 	FILE* fd = fopen("board.txt", "r");
 	if (fd == NULL){
 		//error!
@@ -95,16 +102,15 @@ int sudoku_init(sudoku_t* self){
 		r = fscanf(fd, "%d", &num);
 	}
 	fclose(fd);
+	self->msg = msg;
 	return 0;
 }
 
-sudoku_message_t* sudoku_print(sudoku_t* self, char* cmd){
-	self->msg.text = self->draw_board;
-	self->msg.size = BOARD_PRINT_SIZE;
-	return &(self->msg);
+common_message_t* sudoku_print_board(sudoku_t* self, char* cmd){
+	return _sudoku_print_msg(self, self->draw_board, BOARD_PRINT_SIZE);
 }
 
-sudoku_message_t* sudoku_verify(sudoku_t* self, char* cmd){
+common_message_t* sudoku_verify(sudoku_t* self, char* cmd){
 	int verification = 0;
 	for (int i=0; i < LEN; i++){
 		int pos = (i%3)*3 + ((int)(i/3))*9*3;
@@ -118,38 +124,30 @@ sudoku_message_t* sudoku_verify(sudoku_t* self, char* cmd){
 			verification += s1 + s2 + s3;
 		}
 	}
-	if (verification == (LEN * 3)){
-		//number of checks * times checked
-		self->msg.text = VERIFY_OK;
-		self->msg.size = sizeof(VERIFY_OK);
-	} else if (verification == -1){
-		self->msg.text = VERIFY_ERR;
-		self->msg.size = sizeof(VERIFY_ERR);
+
+	if (verification == -1){
+		return _sudoku_print_msg(self, VERIFY_ERR, sizeof(VERIFY_ERR));
 	} else {
-		self->msg.text = VERIFY_OK;
-		self->msg.size = sizeof(VERIFY_OK);
+		return _sudoku_print_msg(self, VERIFY_OK, sizeof(VERIFY_OK));
 	}
-	return &(self->msg);
 }
 
-sudoku_message_t* sudoku_place_value(sudoku_t* self, char* cmd){
-	uint8_t value = cmd[3];//rename
-	int x = cmd[1];
-	int y = cmd[2];
+common_message_t* sudoku_place_value(sudoku_t* self, char* cmd){
+	uint8_t value = cmd[2];//rename
+	int x = cmd[0];
+	int y = cmd[1];
 	int position = (y - 1) + LEN*(x - 1);
 	if (self->ini_board[position] != 0){ 
 	//trying to place on unmodifiable cell
-		self->msg.text = PUT_FAIL;
-		self->msg.size = sizeof(PUT_FAIL);
-		return &(self->msg);
+		return _sudoku_print_msg(self, PUT_FAIL, sizeof(PUT_FAIL));
 	} else {
 		memcpy(&(self->main_board[position]), &value, 1);
 		_sudoku_add_value_to_dboard(self, &(self->main_board[position]), x, y);
-		return sudoku_print(self, cmd);
+		return sudoku_print_board(self, cmd);
 	}
 }
 
-sudoku_message_t* sudoku_reset(sudoku_t* self, char* cmd){
+common_message_t* sudoku_reset(sudoku_t* self, char* cmd){
 	memcpy(&(self->main_board[0]), &(self->ini_board[0]), LEN*LEN);
 	for (int i=0; i < LEN; i++){
 		for (int j =0; j < LEN; j++){
@@ -157,6 +155,6 @@ sudoku_message_t* sudoku_reset(sudoku_t* self, char* cmd){
 										 i + 1, j + 1);
 		}
 	}
-	return sudoku_print(self, cmd);
+	return sudoku_print_board(self, cmd);
 }
 

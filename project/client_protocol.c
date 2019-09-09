@@ -21,7 +21,7 @@ int protocol_parse_client_input(protocol_t* self, char* input){
 	for (int i=0; (cmd_code != NULL) & (i < NUMBER_OF_AVAILABLE_COMMANDS); i++){
 		if (strcmp(cmd_code, AVAILABLE_COMMANDS[i].name) == 0){
 			s = AVAILABLE_COMMANDS[i].parse_function(\
-				self->msg, &(self->msg_size), cmd_code, saveptr);
+				self->msg.text, &(self->msg.size), cmd_code, saveptr);
 			if (s == -1){
 				break;
 			}
