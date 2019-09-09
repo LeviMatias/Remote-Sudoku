@@ -49,5 +49,7 @@ common_message_t* sudoku_print_board(sudoku_t* self, char* cmd);
 //POS returns a pointer to the sudoku msg with the return text
 common_message_t* sudoku_reset(sudoku_t* self, char* cmd);
 
+//class destructor
+void sudoku_release(sudoku_t* self);
 
 #endif

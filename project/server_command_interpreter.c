@@ -7,6 +7,10 @@ const srv_command_struct_t SERVER_COMMANDS[] = {
 	{RES, CMD_LENGTH, &sudoku_reset}
 };
 
+void interpreter_init( interpreter_t* self){
+	self->current_command = NULL;
+}
+
 int interpreter_identify_command(interpreter_t* self, char* inputted_code){
 	//search for a match in the available commands
 	for (int i=0; (inputted_code != NULL) & (i < NUMBER_SERVER_COMMANDS); i++){
@@ -24,3 +28,8 @@ common_message_t* interpreter_execute_command(interpreter_t* self,\
 											 sudoku_t* sudoku, char* cmd){
 	return self->current_command->sudoku_function(sudoku, cmd);
 }
+
+void interpreter_release( interpreter_t* self){
+	//nothing to release
+}
+

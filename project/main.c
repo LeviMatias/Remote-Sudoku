@@ -11,7 +11,7 @@ int Client(const char* host, const char* service){
 	if (s != -1){
 		s = client_network_component_connect(&client);
 	} 
-	if (s != -1){ // if it could not connect
+	if (s != -1){
 		s = client_network_component_play(&client);
 	}
 	network_component_shutdown(&client);

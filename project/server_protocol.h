@@ -2,7 +2,6 @@
 #define __S_PROTOCOL_H__
 
 #include "common_protocol.h"
-#include "server_command_interpreter.h"
 
 int protocol_bind_and_listen(protocol_t* self, struct addrinfo* ai);
 

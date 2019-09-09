@@ -14,6 +14,7 @@ int server_network_component_listen_for_client(networkcomp_t* self){
 
 int server_network_component_play(networkcomp_t* self){
 	interpreter_t interpreter;
+	interpreter_init(&interpreter);
 	sudoku_t sudoku;
 	int s = sudoku_init(&sudoku, &(self->protocol.msg));
 
@@ -40,5 +41,7 @@ int server_network_component_play(networkcomp_t* self){
 			}
 		}
 	}
+	sudoku_release(&sudoku);
+	interpreter_release(&interpreter);
 	return r;
 }
