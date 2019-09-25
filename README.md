@@ -13,6 +13,7 @@ VERIFY // returns if the current state of the board is correct
 EXIT // end
 
 Main objective:
+Implement the whole program using RAII
 Manage the use of a std::stocket
 
 Overall design structure
